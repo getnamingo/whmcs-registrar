@@ -1,0 +1,18 @@
+{
+  "schema": "1.0",
+  "type": "whmcs-addons",
+  "name": "whmcs_registrar",
+  "version": "1.0",
+  "license": "MIT",
+  "category": "utilities",
+  "description": {
+    "name": "ICANN Registrar Accreditation",
+    "tagline": "'Module for Implementing ICANN Accreditation Database Structure"
+  },
+  "authors": [
+    {
+      "name": "Namingo Team",
+      "homepage": "https:\/\/namingo.org\/"
+    }
+  ]
+}
