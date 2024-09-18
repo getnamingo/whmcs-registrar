@@ -7,11 +7,11 @@
   "category": "utilities",
   "description": {
     "name": "ICANN Registrar Accreditation",
-    "tagline": "'Module for Implementing ICANN Accreditation Database Structure"
+    "tagline": "Module for Implementing ICANN Accreditation Database Structure"
   },
   "authors": [
     {
-      "name": "Namingo Team",
+      "name": "Namingo",
       "homepage": "https:\/\/namingo.org\/"
     }
   ]
