@@ -13,7 +13,7 @@ function whmcs_registrar_config() {
     return [
         'name' => 'ICANN Registrar Accreditation',
         'description' => 'Module for Implementing ICANN Accreditation Database Structure',
-        'author' => 'Namingo Team',
+        'author' => 'Namingo',
         'version' => '1.0',
     ];
 }
