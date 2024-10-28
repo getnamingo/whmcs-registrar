@@ -85,8 +85,11 @@ function whmcs_registrar_activate() {
         CREATE TABLE IF NOT EXISTS `namingo_domain` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `name` varchar(68) NOT NULL,
-            `tldid` int(10) unsigned NOT NULL,
+            `registry_domain_id` varchar(68) NOT NULL,
             `registrant` int(10) unsigned default NULL,
+            `admin` int(10) unsigned default NULL,
+            `tech` int(10) unsigned default NULL,
+            `billing` int(10) unsigned default NULL,
             `crdate` datetime(3) NOT NULL,
             `exdate` datetime(3) NOT NULL,
             `lastupdate` datetime(3) default NULL,
@@ -130,16 +133,6 @@ function whmcs_registrar_activate() {
             `phase_name` VARCHAR(75) DEFAULT NULL,
             PRIMARY KEY (`id`),
             UNIQUE KEY `name` (`name`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-        -- Domain Contact Map Table
-        CREATE TABLE IF NOT EXISTS `namingo_domain_contact_map` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `domain_id` int(10) unsigned NOT NULL,
-            `contact_id` int(10) unsigned NOT NULL,
-            `type` enum('admin','billing','tech') NOT NULL default 'admin',
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `uniquekey` (`domain_id`,`contact_id`,`type`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
         -- Host Table
@@ -214,7 +207,6 @@ function whmcs_registrar_deactivate() {
         Capsule::schema()->dropIfExists('namingo_contact');
         Capsule::schema()->dropIfExists('namingo_contact_postalInfo');
         Capsule::schema()->dropIfExists('namingo_domain');
-        Capsule::schema()->dropIfExists('namingo_domain_contact_map');
         Capsule::schema()->dropIfExists('namingo_host');
         Capsule::schema()->dropIfExists('namingo_domain_host_map');
         Capsule::schema()->dropIfExists('namingo_domain_dnssec');
