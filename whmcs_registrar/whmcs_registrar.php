@@ -24,17 +24,6 @@ function whmcs_registrar_config() {
 function whmcs_registrar_activate() {
     try {
         $sql = "
-        
-        -- Domain TLD Table
-        CREATE TABLE IF NOT EXISTS `namingo_domain_tld` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `tld` varchar(32) NOT NULL,
-            `idn_table` varchar(255) NOT NULL,
-            `secure` TINYINT UNSIGNED NOT NULL,
-            `launch_phase_id` INT DEFAULT NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `tld` (`tld`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
         -- Contact Table
         CREATE TABLE IF NOT EXISTS `namingo_contact` (
@@ -177,34 +166,6 @@ function whmcs_registrar_activate() {
             UNIQUE KEY `domain_host_map_id` (`domain_id`,`host_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-        -- Host Address Table
-        CREATE TABLE IF NOT EXISTS `namingo_host_addr` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `host_id` int(10) unsigned NOT NULL,
-            `addr` varchar(45) NOT NULL,
-            `ip` enum('v4','v6') NOT NULL default 'v4',
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `unique` (`host_id`,`addr`,`ip`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-        -- Domain Meta Table
-        CREATE TABLE IF NOT EXISTS `namingo_domain_meta` (
-            `id` int(10) NOT NULL AUTO_INCREMENT,
-            `domain_id` int(10) NOT NULL,
-            `registry_domain_id` varchar(100) DEFAULT NULL,
-            `reseller` varchar(255) DEFAULT NULL,
-            `reseller_url` varchar(255) DEFAULT NULL,
-            `registrant_contact_id` varchar(100) DEFAULT NULL,
-            `admin_contact_id` varchar(100) DEFAULT NULL,
-            `tech_contact_id` varchar(100) DEFAULT NULL,
-            `billing_contact_id` varchar(100) DEFAULT NULL,
-            `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-            `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `domain_id` (`domain_id`),
-            CONSTRAINT `domain_meta_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `tbldomains`(`id`) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
         -- Domain Status Table
         CREATE TABLE IF NOT EXISTS `namingo_domain_status` (
             `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -250,17 +211,14 @@ function whmcs_registrar_activate() {
  */
 function whmcs_registrar_deactivate() {
     try {
-        Capsule::schema()->dropIfExists('namingo_domain_tld');
         Capsule::schema()->dropIfExists('namingo_contact');
         Capsule::schema()->dropIfExists('namingo_contact_postalInfo');
         Capsule::schema()->dropIfExists('namingo_domain');
         Capsule::schema()->dropIfExists('namingo_domain_contact_map');
         Capsule::schema()->dropIfExists('namingo_host');
         Capsule::schema()->dropIfExists('namingo_domain_host_map');
-        Capsule::schema()->dropIfExists('namingo_host_addr');
         Capsule::schema()->dropIfExists('namingo_domain_dnssec');
         Capsule::schema()->dropIfExists('namingo_domain_status');
-        Capsule::schema()->dropIfExists('namingo_domain_meta');
         
         return [
             'status' => 'success',
