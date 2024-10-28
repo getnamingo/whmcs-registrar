@@ -30,38 +30,8 @@ function whmcs_registrar_activate() {
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `identifier` varchar(255) NOT NULL,
             `voice` varchar(17) default NULL,
-            `voice_x` int(10) default NULL,
             `fax` varchar(17) default NULL,
-            `fax_x` int(10) default NULL,
             `email` varchar(255) NOT NULL,
-            `nin` varchar(255) default NULL,
-            `nin_type` enum('personal','business') default NULL,
-            `clid` int(10) unsigned NOT NULL,
-            `crid` int(10) unsigned NOT NULL,
-            `crdate` datetime(3) NOT NULL,
-            `upid` int(10) unsigned default NULL,
-            `lastupdate` datetime(3) default NULL,
-            `trdate` datetime(3) default NULL,
-            `trstatus` enum('clientApproved','clientCancelled','clientRejected','pending','serverApproved','serverCancelled') default NULL,
-            `reid` int(10) unsigned default NULL,
-            `redate` datetime(3) default NULL,
-            `acid` int(10) unsigned default NULL,
-            `acdate` datetime(3) default NULL,
-            `disclose_voice` enum('0','1') NOT NULL default '1',
-            `disclose_fax` enum('0','1') NOT NULL default '1',
-            `disclose_email` enum('0','1') NOT NULL default '1',
-            `validation` enum('0','1','2','3','4'),
-            `validation_stamp` datetime(3) default NULL,
-            `validation_log` varchar(255) DEFAULT NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `identifier` (`identifier`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-        -- Contact Postalinfo Table
-        CREATE TABLE IF NOT EXISTS `namingo_contact_postalInfo` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `contact_id` int(10) unsigned NOT NULL,
-            `type` enum('int','loc') NOT NULL default 'int',
             `name` varchar(255) NOT NULL,
             `org` varchar(255) default NULL,
             `street1` varchar(255) default NULL,
@@ -71,14 +41,23 @@ function whmcs_registrar_activate() {
             `sp` varchar(255) default NULL,
             `pc` varchar(16) default NULL,
             `cc` char(2) NOT NULL,
+            `clid` int(10) unsigned NOT NULL,
+            `crdate` datetime(3) NOT NULL,
+            `upid` int(10) unsigned default NULL,
+            `lastupdate` datetime(3) default NULL,
+            `disclose_voice` enum('0','1') NOT NULL default '1',
+            `disclose_fax` enum('0','1') NOT NULL default '1',
+            `disclose_email` enum('0','1') NOT NULL default '1',
             `disclose_name_int` enum('0','1') NOT NULL default '1',
-            `disclose_name_loc` enum('0','1') NOT NULL default '1',
             `disclose_org_int` enum('0','1') NOT NULL default '1',
-            `disclose_org_loc` enum('0','1') NOT NULL default '1',
             `disclose_addr_int` enum('0','1') NOT NULL default '1',
-            `disclose_addr_loc` enum('0','1') NOT NULL default '1',
+            `nin` varchar(255) default NULL,
+            `nin_type` enum('personal','business') default NULL,
+            `validation` enum('0','1','2','3','4'),
+            `validation_stamp` datetime(3) default NULL,
+            `validation_log` varchar(255) DEFAULT NULL,
             PRIMARY KEY (`id`),
-            UNIQUE KEY `uniquekey` (`contact_id`,`type`)
+            UNIQUE KEY `identifier` (`identifier`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
         -- Domain Table
@@ -90,6 +69,11 @@ function whmcs_registrar_activate() {
             `admin` int(10) unsigned default NULL,
             `tech` int(10) unsigned default NULL,
             `billing` int(10) unsigned default NULL,
+            `ns1` varchar(68) default NULL,
+            `ns2` varchar(68) default NULL,
+            `ns3` varchar(68) default NULL,
+            `ns4` varchar(68) default NULL,
+            `ns5` varchar(68) default NULL,
             `crdate` datetime(3) NOT NULL,
             `exdate` datetime(3) NOT NULL,
             `lastupdate` datetime(3) default NULL,
@@ -110,10 +94,6 @@ function whmcs_registrar_activate() {
             `rgppostData` text default NULL,
             `rgpdelTime` datetime(3) default NULL,
             `rgpresTime` datetime(3) default NULL,
-            `rgpresReason` text default NULL,
-            `rgpstatement1` text default NULL,
-            `rgpstatement2` text default NULL,
-            `rgpother` text default NULL,
             `addPeriod` tinyint(3) unsigned default NULL,
             `autoRenewPeriod` tinyint(3) unsigned default NULL,
             `renewPeriod` tinyint(3) unsigned default NULL,
@@ -133,30 +113,6 @@ function whmcs_registrar_activate() {
             `phase_name` VARCHAR(75) DEFAULT NULL,
             PRIMARY KEY (`id`),
             UNIQUE KEY `name` (`name`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-        -- Host Table
-        CREATE TABLE IF NOT EXISTS `namingo_host` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `name` varchar(255) NOT NULL,
-            `domain_id` int(10) unsigned default NULL,
-            `clid` int(10) unsigned NOT NULL,
-            `crid` int(10) unsigned NOT NULL,
-            `crdate` datetime(3) NOT NULL,
-            `upid` int(10) unsigned default NULL,
-            `lastupdate` datetime(3) default NULL,
-            `trdate` datetime(3) default NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `name` (`name`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-        -- Domain Host Map Table
-        CREATE TABLE IF NOT EXISTS `namingo_domain_host_map` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-            `domain_id` int(10) unsigned NOT NULL,
-            `host_id` int(10) unsigned NOT NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `domain_host_map_id` (`domain_id`,`host_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
         -- Domain Status Table
@@ -205,10 +161,7 @@ function whmcs_registrar_activate() {
 function whmcs_registrar_deactivate() {
     try {
         Capsule::schema()->dropIfExists('namingo_contact');
-        Capsule::schema()->dropIfExists('namingo_contact_postalInfo');
         Capsule::schema()->dropIfExists('namingo_domain');
-        Capsule::schema()->dropIfExists('namingo_host');
-        Capsule::schema()->dropIfExists('namingo_domain_host_map');
         Capsule::schema()->dropIfExists('namingo_domain_dnssec');
         Capsule::schema()->dropIfExists('namingo_domain_status');
         
