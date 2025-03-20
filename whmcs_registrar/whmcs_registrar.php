@@ -109,7 +109,7 @@ function whmcs_registrar_activate() {
             `tm_notice_id` varchar(150) default NULL,
             `tm_notice_validator` varchar(30) default NULL,
             `tm_smd_id` text default NULL,
-            `tm_phase` TEXT NOT NULL DEFAULT 'NONE',
+            `tm_phase` VARCHAR(100) NOT NULL DEFAULT 'NONE',
             `phase_name` VARCHAR(75) DEFAULT NULL,
             PRIMARY KEY (`id`),
             UNIQUE KEY `name` (`name`)
